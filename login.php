@@ -16,6 +16,7 @@
   <?php
 
   include 'config.php';
+  $_SESSION['success'] = "";
   $_SESSION['error'] = "";
 
   if (isset($_POST['submit'])) {
@@ -26,12 +27,12 @@
     $acc_num = mysqli_real_escape_string($conn, $acc_num);
     $password = mysqli_real_escape_string($conn, $password);
 
-    $sql = "SELECT * from wp_pas_user where acc_num = '$acc_num' and pass_w = SHA2('$password', 256)";
+    $sql = "SELECT * from users where acc_num = '$acc_num' and pass_w = SHA2('$password', 256)";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
     $count = mysqli_num_rows($result);
 
-    $ses_sql = mysqli_query($conn, "SELECT * FROM wp_bal_table WHERE Account = '$acc_num'");
+    $ses_sql = mysqli_query($conn, "SELECT * FROM balance WHERE Account = '$acc_num'");
     if (strlen($acc_num) < 8) {
       $_SESSION['error'] = "<p style='color:red;'>Account does not exist</p>";
     } else {
@@ -39,7 +40,7 @@
         while ($rows = mysqli_fetch_array($ses_sql, MYSQLI_ASSOC)) {
           if ($rows['Account'] == $acc_num) {
             $_SESSION['acc_num'] = $acc_num;
-            header("location: http://localhost/php-portal/dashboard.php");
+            header("location: http://localhost/php-portal/dashboard");
           } else {
             $_SESSION['error'] = "<p style='color:red';>Account not found in the Database</p>";
           }
@@ -88,7 +89,7 @@
                     <p id="alertLoginMsg"></p>
                   </div>
                   <button name="submit" id='btn-login' class="btn btn-warning" onchange='check()'>Login</button>
-                  <p class="text mt-3">Don't have an account? <a href="http://localhost/php-portal/register.php/" class="link-primary text-decoration-none">Register</a></p>
+                  <p class="text mt-3">Don't have an account? <a href="http://localhost/php-portal/register" class="link-primary text-decoration-none">Register</a></p>
                 </form>
               </div>
             </div>

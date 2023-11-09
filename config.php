@@ -2,11 +2,11 @@
 session_start();
 $servername = "localhost";
 $username = "root";
-$password = "";
+$sec_code = "";
 $dbname = "mobdb";
 
 // Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname) or die(mysqli_error($conn));
+$conn = mysqli_connect($servername, $username, $sec_code, $dbname) or die(mysqli_error($conn));
 // Check connection
 mysqli_select_db($conn, 'mobdb') or die(mysqli_error($conn));
 

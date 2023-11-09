@@ -1,0 +1,26 @@
+RewriteEngine On
+
+
+
+# Block direct access to register.php, login.php, and dashboard.php
+RewriteCond %{THE_REQUEST} /(register|login|dashboard)\.php [NC]
+RewriteRule ^ - [F]
+
+# Rewrite rule for login.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^login$ /php-portal/login.php [QSA,L]
+RewriteRule ^login/$ /php-portal/login.php [QSA,L]
+
+# Rewrite rule for register.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^register$ /php-portal/register.php [QSA,L]
+RewriteRule ^register/$ /php-portal/register.php [QSA,L]
+
+
+# Rewrite rule for dashboard.php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^dashboard$ /php-portal/dashboard.php [QSA,L]
+RewriteRule ^dashboard/$ /php-portal/dashboard.php [QSA,L]

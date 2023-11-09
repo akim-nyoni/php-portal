@@ -14,24 +14,55 @@
 <body>
 
   <?php
+
   include 'config.php';
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if ($_POST['password'] == $_POST['checkpassword']) {
-      $acc_num = $_POST['account_num'];
-      $password = $_POST['password'];
+    $acc_num = $_POST['account_num'];
+    $sec_code = $_POST['sec_code'];
+    $acc_num = stripcslashes($acc_num);
+    $sec_code = stripcslashes($sec_code);
+    $acc_num = mysqli_real_escape_string($conn, $acc_num);
+    $sec_code = mysqli_real_escape_string($conn, $sec_code);
 
-      $sql = "INSERT INTO wp_pas_user (acc_num, pass_w)"
-        . "VALUES('$acc_num', SHA2('$password', 256))";
+    $sql = "SELECT * from verification where Account = '$acc_num' and ucARPin = '$sec_code'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    $count = mysqli_num_rows($result);
 
-      if ($conn->query($sql) === TRUE) {
-        $_SESSION['success'] = "<p style='color:green;'>You have successfully registered your account. You may login</p>";
-        header("location: http://localhost/php-portal/login.php");
-      } else {
-        $msg = "<p style='color:red;'>Account already exist</p>";
+    $ses_sql = mysqli_query($conn, "SELECT * FROM balance WHERE Account = '$acc_num'");
+
+    if ($count == 1) {
+      while ($rows = mysqli_fetch_array($ses_sql, MYSQLI_ASSOC)) {
+        if ($rows['Account'] == $acc_num) {
+          $password = $_POST['password'];
+
+          $checkQuery = "SELECT COUNT(*) as count FROM users WHERE acc_num = '$acc_num'";
+          $checkResult = mysqli_query($conn, $checkQuery);
+          $checkRow = mysqli_fetch_assoc($checkResult);
+          $accountExists = $checkRow['count'] > 0;
+
+          if ($accountExists) {
+            $msg = "<p style='color:red;'>Account already exists</p>";
+          } else {
+            // Perform the INSERT query
+            $sql = "INSERT INTO users (acc_num, pass_w)" . "VALUES('$acc_num', SHA2('$password', 256))";
+            // Rest of your code
+          }
+
+
+          if ($conn->query($sql) === TRUE) {
+            $_SESSION['success'] = "<p style='color:green;'>You have successfully registered your account. You may login</p>";
+            header("location: http://localhost/php-portal/login");
+          } else {
+            $msg = "<p style='color:red;'>Account already exist</p>";
+          }
+        } else {
+          $msg = "<p style='color:red';>Account not found in the Database</p>";
+        }
       }
     } else {
-      "Two password do not match";
+      $msg = "<p style='color:red;'>Invalid Account Number or Security Code.</p>";
     }
   }
 
@@ -67,8 +98,13 @@
                   <div class="form-control-section mt-3">
                     <p id="alertPassword"></p>
                   </div>
+                  Enter Security Code to Proceed
+                  <div class="form-control-section mt-3">
+                    <input class="form-control" type="password" name="sec_code" id="sec_code" placeholder="Security Code" autocomplete="off" onkeyup='check()' required>
+                  </div>
+
                   <button id="btn-reg" class="btn btn-warning mt-2" onchange='check();'>Register</button>
-                  <p class="text mt-3">Have an account? <a href="http://localhost/php-portal/login.php/" class="link-primary text-decoration-none"> Login</a></p>
+                  <p class="text mt-3">Have an account? <a href="http://localhost/php-portal/login" class="link-primary text-decoration-none"> Login</a></p>
                 </form>
               </div>
             </div>

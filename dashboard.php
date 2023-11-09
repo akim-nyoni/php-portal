@@ -18,11 +18,11 @@
   include 'config.php';
   $AccountNo = $_SESSION['acc_num'];
   if ($AccountNo == "") {
-    header("location: http://localhost/php-portal/login.php");
+    header("location: http://localhost/php-portal/login");
   } else if (strlen($AccountNo) < 8) {
-    header("location: http://localhost/php-portal/login.php");
+    header("location: http://localhost/php-portal/login");
   } else {
-    $ses_sql = mysqli_query($conn, "SELECT * FROM wp_bal_table b, wp_pas_user p WHERE (p.acc_num = b.Account) and p.acc_num = '$AccountNo'");
+    $ses_sql = mysqli_query($conn, "SELECT * FROM balance b, users p WHERE (p.acc_num = b.Account) and p.acc_num = '$AccountNo'");
 
     while ($rows = mysqli_fetch_array($ses_sql, MYSQLI_ASSOC)) {
       if ($rows['Account'] == $AccountNo) {
@@ -79,7 +79,7 @@
                         <?php
                         if (isset($_POST['logout'])) {
                           session_destroy();
-                          header("location: http://localhost/php-portal/login.php");
+                          header("location: http://localhost/php-portal/login");
                         }
                         ?>
                       </form>
@@ -102,7 +102,7 @@
   <?php
       } else {
         session_destroy();
-        header("location: http://localhost/php-portal/login.php");
+        header("location: http://localhost/php-portal/login");
       }
     }
   }
