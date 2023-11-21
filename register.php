@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +54,9 @@
 
           if ($conn->query($sql) === TRUE) {
             $_SESSION['success'] = "<p style='color:green;'>You have successfully registered your account. You may login</p>";
-            header("location: http://localhost/php-portal/login");
+            ?>
+            <script>window.location="https://balance.beitbridgemun.co.zw/login";</script>
+            <?php
           } else {
             $msg = "<p style='color:red;'>Account already exist</p>";
           }
@@ -74,12 +77,17 @@
   <div class="container">
     <div class="row mt-5">
       <div class="col-md-4"></div>
-      <div class="col-md-4">
-        <section class="form-control p-4">
+      <div class="col-md-4" style="background:green;padding:0;border-radius: 8px;">
+        <center>
+          <h3 class="p-2" style="color:white;">Municipality Of Beitbridge</h3>
+        </center>
+        <section style="background:#F7F7F7;" class="form-control p-4">
           <div class="login-form-bd">
             <div class="form-wrapper">
               <div class="form-container">
-                <h1> Register</h1>
+                <h4>
+                  <p>Register Portal</p>
+                </h4>
                 <div class="form-control-section">
                   <?php echo $msg; ?>
                 </div>
@@ -103,8 +111,8 @@
                     <input class="form-control" type="password" name="sec_code" id="sec_code" placeholder="Security Code" autocomplete="off" onkeyup='check()' required>
                   </div>
 
-                  <button id="btn-reg" class="btn btn-warning mt-2" onchange='check();'>Register</button>
-                  <p class="text mt-3">Have an account? <a href="http://localhost/php-portal/login" class="link-primary text-decoration-none"> Login</a></p>
+                  <button id="btn-reg" class="btn btn-warning mt-3" onchange='check();'>Register</button>
+                  <p class="text mt-3">Have an account? <a href="/login" class="link-primary text-decoration-none"> Login</a></p>
                 </form>
               </div>
             </div>

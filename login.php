@@ -1,3 +1,7 @@
+<?php 
+    session_start();
+    $_SESSION['start_time'] = time();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,9 +18,7 @@
 <body>
 
   <?php
-
   include 'config.php';
-  $_SESSION['success'] = "";
   $_SESSION['error'] = "";
 
   if (isset($_POST['submit'])) {
@@ -39,8 +41,10 @@
       if ($count == 1) {
         while ($rows = mysqli_fetch_array($ses_sql, MYSQLI_ASSOC)) {
           if ($rows['Account'] == $acc_num) {
-            $_SESSION['acc_num'] = $acc_num;
-            header("location: http://localhost/php-portal/dashboard");
+            $_SESSION['acc_num'] = $acc_num; 
+            ?>
+            <script>window.location="https://balance.beitbridgemun.co.zw/dashboard";</script>
+            <?php
           } else {
             $_SESSION['error'] = "<p style='color:red';>Account not found in the Database</p>";
           }
@@ -89,7 +93,7 @@
                     <p id="alertLoginMsg"></p>
                   </div>
                   <button name="submit" id='btn-login' class="btn btn-warning" onchange='check()'>Login</button>
-                  <p class="text mt-3">Don't have an account? <a href="http://localhost/php-portal/register" class="link-primary text-decoration-none">Register</a></p>
+                  <p class="text mt-3">Don't have an account? <a href="/register" class="link-primary text-decoration-none">Register</a></p>
                 </form>
               </div>
             </div>
